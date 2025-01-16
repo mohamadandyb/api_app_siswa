@@ -1,7 +1,7 @@
 <?php
 // Menggunakan CORS untuk mengizinkan permintaan dari domain lain
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Methods: DELETE"); // Ganti dengan DELETE
 header("Content-Type: application/json; charset=UTF-8");
 
 // Koneksi ke database
@@ -20,7 +20,8 @@ if ($conn->connect_error) {
 }
 
 // Mengambil ID yang dikirim dari request
-$id = $_POST["id"] ?? null;
+$data = json_decode(file_get_contents("php://input"), true); // Mengambil dan mendecode data JSON
+$id = $data['id'] ?? null; // Mendapatkan ID yang diterima
 
 // Memastikan ID tidak kosong
 if ($id === null) {
@@ -29,7 +30,7 @@ if ($id === null) {
 }
 
 // Menyiapkan query SQL untuk menghapus data
-$sql = "DELETE FROM siswa WHERE id=?"; // Pastikan 'id' adalah nama kolom yang tepat
+$sql = "DELETE FROM siswa WHERE id=?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $id); // Mengikat parameter (integer)
 

@@ -4,7 +4,14 @@ header("Access-Control-Allow-Methods: POST");
 header("Content-Type: application/json; charset=UTF-8");
 
 // Koneksi ke database
-$koneksi = new mysqli('localhost', 'root', 'mysql123', 'db_siswa');
+$servername = "localhost"; // Ganti dengan hostname database Anda
+$username = "root"; // Ganti sesuai username database
+$password = "mysql123"; // Ganti sesuai password database
+$dbname = "db_siswa"; // Ganti dengan nama database Anda
+$port = 8889; // Ganti dengan port yang sesuai jika diperlukan
+
+// Koneksi ke database
+$koneksi = new mysqli($servername, $username, $password, $dbname, $port);
 
 // Mengecek apakah koneksi berhasil
 if ($koneksi->connect_error) {
@@ -12,10 +19,11 @@ if ($koneksi->connect_error) {
 }
 
 // Mengambil data dari request
-$id = $_POST["id"] ?? null; // Mendapatkan ID yang diterima
-$nisn = $_POST['nisn'] ?? '';
-$nama = $_POST['nama'] ?? '';
-$alamat = $_POST['alamat'] ?? '';
+$data = json_decode(file_get_contents("php://input"), true); // Mengambil dan mendecode data JSON
+$id = $data['id'] ?? null; // Mendapatkan ID yang diterima
+$nisn = $data['nisn'] ?? '';
+$nama = $data['nama'] ?? '';
+$alamat = $data['alamat'] ?? '';
 
 // Memastikan data tidak kosong
 if (empty($id) || empty($nisn) || empty($nama) || empty($alamat)) {
